@@ -1,0 +1,36 @@
+{
+  "name": "@superset-ui/demo",
+  "version": "0.1.0",
+  "description": "Storybook for Superset UI ✨",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.14.6",
+    "@storybook/addon-actions": "^6.3.4",
+    "@storybook/addon-essentials": "^6.3.4",
+    "@storybook/addon-links": "^6.3.4",
+    "@storybook/react": "^6.3.4",
+    "babel-loader": "^8.2.2"
+  },
+  "dependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "@superset-ui/core": "^0.17.58",
+    "@superset-ui/chart-controls": "^0.17.58",
+    "@superset-ui/plugin-chart-echarts": "file:../plugin-chart-echarts/src",
+    "@storybook/addon-knobs": "^6.1.15",
+    "@types/react-loadable": "^5.5.3",
+    "@types/react-resizable": "^1.7.2",
+    "react-resizable": "^1.10.1",
+    "react-loadable": "^5.5.0",
+    "antd": "^4.9.4",
+    "react-icons": "^4.1.0"
+  }
+}
