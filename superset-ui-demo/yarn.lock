@@ -2235,16 +2235,7 @@
     resolve-from "^5.0.0"
     store2 "^2.12.0"
 
-"@superset-ui/chart-controls@0.17.58":
-  version "0.17.58"
-  resolved "https://registry.yarnpkg.com/@superset-ui/chart-controls/-/chart-controls-0.17.58.tgz#c2a23454caa9798cf3712473c80f6a8cc777ff57"
-  integrity sha512-tYMBHCm1U7aMyl98IkbTqU98mBJCB/EAp6noUsLfj5le2PqBiA4X+MezFY/OAywqU4D1eS6nTLHX1oqGt6WtZw==
-  dependencies:
-    "@superset-ui/core" "0.17.58"
-    lodash "^4.17.15"
-    prop-types "^15.7.2"
-
-"@superset-ui/chart-controls@^0.17.58":
+"@superset-ui/chart-controls@0.17.69", "@superset-ui/chart-controls@^0.17.58":
   version "0.17.69"
   resolved "https://registry.yarnpkg.com/@superset-ui/chart-controls/-/chart-controls-0.17.69.tgz#841394b7e3cc0bac22c77ec1bbbb8ef2cad5cc39"
   integrity sha512-K27Kfk7ctfckA92G6bBj/EL8+qSSat4+5J5OjeYt7dnr76Mz4S/oxsQY8cEa3U3EixGqH9q8OFS88bSgV9inXw==
@@ -2254,42 +2245,7 @@
     lodash "^4.17.15"
     prop-types "^15.7.2"
 
-"@superset-ui/core@0.17.58":
-  version "0.17.58"
-  resolved "https://registry.yarnpkg.com/@superset-ui/core/-/core-0.17.58.tgz#0f73fbf8de32d0acd6e0ee474b08daf372b25131"
-  integrity sha512-jYu/x+YnvU4+b427zyju7ZwFK2bGqp2mds08baB9Qi6uC9IOPWHRX2dpPq/QMlvNhNocfvTxzuvI0Jei1hcFbw==
-  dependencies:
-    "@babel/runtime" "^7.1.2"
-    "@emotion/cache" "^11.1.3"
-    "@emotion/react" "^11.1.5"
-    "@emotion/styled" "^11.3.0"
-    "@types/d3-format" "^1.3.0"
-    "@types/d3-interpolate" "^1.3.1"
-    "@types/d3-scale" "^2.1.1"
-    "@types/d3-time" "^1.0.9"
-    "@types/d3-time-format" "^2.1.0"
-    "@types/lodash" "^4.14.149"
-    "@types/rison" "0.0.6"
-    "@types/seedrandom" "^2.4.28"
-    "@vx/responsive" "^0.0.199"
-    csstype "^2.6.4"
-    d3-format "^1.3.2"
-    d3-interpolate "^1.4.0"
-    d3-scale "^3.0.0"
-    d3-time "^1.0.10"
-    d3-time-format "^2.2.0"
-    fetch-retry "^4.0.1"
-    jed "^1.1.1"
-    lodash "^4.17.11"
-    pretty-ms "^7.0.0"
-    react-error-boundary "^1.2.5"
-    react-markdown "^4.3.1"
-    reselect "^4.0.0"
-    rison "^0.1.1"
-    seedrandom "^3.0.5"
-    whatwg-fetch "^3.0.0"
-
-"@superset-ui/core@0.17.64", "@superset-ui/core@^0.17.58":
+"@superset-ui/core@0.17.64", "@superset-ui/core@^0.17.64":
   version "0.17.64"
   resolved "https://registry.yarnpkg.com/@superset-ui/core/-/core-0.17.64.tgz#cdd24236c27d1db58240711ee3b206339247dd6e"
   integrity sha512-Qnmaj5xKo3MxS3ONS1t472G9m+o5STYoy6OEHiVvHdlYmdn2SbisZCUhQOUSun6uAqa1wRlJR28vvnmvoFN0Dg==
@@ -2324,13 +2280,13 @@
     seedrandom "^3.0.5"
     whatwg-fetch "^3.0.0"
 
-"@superset-ui/plugin-chart-echarts@0.17.58":
-  version "0.17.58"
-  resolved "https://registry.yarnpkg.com/@superset-ui/plugin-chart-echarts/-/plugin-chart-echarts-0.17.58.tgz#f3bb1d8d5cd4de73b065c436c87805881be233b2"
-  integrity sha512-/fIEx6bkZBOyPsFScNKeMx/2pipNC7GS3H009x9DCWiqjMk2luIDnGdzoL/tIhyJ8TJxbWQclQLsWK+6bhL5KQ==
+"@superset-ui/plugin-chart-echarts@^0.17.58":
+  version "0.17.69"
+  resolved "https://registry.yarnpkg.com/@superset-ui/plugin-chart-echarts/-/plugin-chart-echarts-0.17.69.tgz#ba5ac40ccc3f7df66cd0f5c1661c3170244a55cd"
+  integrity sha512-DTO/VZng2mNqgwnk2P9kRS7kdUaauJhQUYxr1PO7DHa8O9NyTOBm0UXxlFXsdRX+bqk360UTqx/VxgnZuu6Emw==
   dependencies:
-    "@superset-ui/chart-controls" "0.17.58"
-    "@superset-ui/core" "0.17.58"
+    "@superset-ui/chart-controls" "0.17.69"
+    "@superset-ui/core" "0.17.64"
     "@types/mathjs" "^6.0.7"
     d3-array "^1.2.0"
     echarts "^5.1.2"
