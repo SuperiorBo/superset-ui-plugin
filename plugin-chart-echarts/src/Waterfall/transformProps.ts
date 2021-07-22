@@ -18,22 +18,16 @@
  */
 /* eslint-disable camelcase */
 import {
-  AnnotationLayer,
   CategoricalColorNamespace,
   ChartProps,
   getNumberFormatter,
-  isEventAnnotationLayer,
-  isFormulaAnnotationLayer,
-  isIntervalAnnotationLayer,
-  isTimeseriesAnnotationLayer,
   TimeseriesChartDataResponseResult,
 } from '@superset-ui/core';
 import { EChartsOption, SeriesOption } from 'echarts';
-import { DEFAULT_FORM_DATA, EchartsTimeseriesFormData } from './types';
+import { DEFAULT_FORM_DATA, EchartsWaterfallFormData } from './types';
 import { EchartsProps, ForecastSeriesEnum, ProphetValue } from '../types';
 import { parseYAxisBound } from '../utils/controls';
 import { dedupSeries, extractTimeseriesSeries, getLegendProps } from '../utils/series';
-import { extractAnnotationLabels } from '../utils/annotation';
 import {
   extractForecastSeriesContext,
   extractProphetValuesFromTooltipParams,
@@ -45,36 +39,23 @@ import {
   getPadding,
   getTooltipTimeFormatter,
   getXAxisFormatter,
-  transformEventAnnotation,
-  transformFormulaAnnotation,
-  transformIntervalAnnotation,
   transformSeries,
-  transformTimeseriesAnnotation,
 } from './transformers';
 import { TIMESERIES_CONSTANTS } from '../constants';
 
 export default function transformProps(chartProps: ChartProps): EchartsProps {
   const { width, height, formData, queriesData } = chartProps;
   const {
-    annotation_data: annotationData_,
-    data = [],
+    data = []
   } = queriesData[0] as TimeseriesChartDataResponseResult;
-  const annotationData = annotationData_ || {};
 
   const {
-    area,
-    annotationLayers,
     colorScheme,
-    contributionMode,
-    forecastEnabled,
     legendOrientation,
     legendType,
     logAxis,
     markerEnabled,
     markerSize,
-    opacity,
-    minorSplitLine,
-    seriesType,
     showLegend,
     stack,
     truncateYAxis,
@@ -85,61 +66,34 @@ export default function transformProps(chartProps: ChartProps): EchartsProps {
     yAxisBounds,
     yAxisTitle,
     tooltipTimeFormat,
-    zoomable,
-    richTooltip,
     xAxisLabelRotation,
-  }: EchartsTimeseriesFormData = { ...DEFAULT_FORM_DATA, ...formData };
+  }: EchartsWaterfallFormData = { ...DEFAULT_FORM_DATA, ...formData };
 
   const colorScale = CategoricalColorNamespace.getScale(colorScheme as string);
   const rebasedData = rebaseTimeseriesDatum(data);
   const rawSeries = extractTimeseriesSeries(rebasedData, {
-    fillNeighborValue: stack && !forecastEnabled ? 0 : undefined,
+    fillNeighborValue: stack ? 0 : undefined,
   });
   const series: SeriesOption[] = [];
-  const formatter = getNumberFormatter(contributionMode ? ',.0%' : yAxisFormat);
+  const formatter = getNumberFormatter(yAxisFormat);
 
   rawSeries.forEach(entry => {
     const transformedSeries = transformSeries(entry, colorScale, {
-      area,
-      forecastEnabled,
       markerEnabled,
       markerSize,
-      opacity,
-      seriesType,
       stack,
-      richTooltip,
     });
     if (transformedSeries) series.push(transformedSeries);
   });
 
-  annotationLayers
-    .filter((layer: AnnotationLayer) => layer.show)
-    .forEach((layer: AnnotationLayer) => {
-      if (isFormulaAnnotationLayer(layer))
-        series.push(transformFormulaAnnotation(layer, data, colorScale));
-      else if (isIntervalAnnotationLayer(layer)) {
-        series.push(...transformIntervalAnnotation(layer, data, annotationData, colorScale));
-      } else if (isEventAnnotationLayer(layer)) {
-        series.push(...transformEventAnnotation(layer, data, annotationData, colorScale));
-      } else if (isTimeseriesAnnotationLayer(layer)) {
-        series.push(...transformTimeseriesAnnotation(layer, markerSize, data, annotationData));
-      }
-    });
-
   // yAxisBounds need to be parsed to replace incompatible values with undefined
   let [min, max] = (yAxisBounds || []).map(parseYAxisBound);
-
-  // default to 0-100% range when doing row-level contribution chart
-  if (contributionMode === 'row' && stack) {
-    if (min === undefined) min = 0;
-    if (max === undefined) max = 1;
-  }
 
   const tooltipFormatter = getTooltipTimeFormatter(tooltipTimeFormat);
   const xAxisFormatter = getXAxisFormatter(xAxisTimeFormat);
 
   const addYAxisLabelOffset = !!yAxisTitle;
-  const padding = getPadding(showLegend, legendOrientation, addYAxisLabelOffset, zoomable);
+  const padding = getPadding(showLegend, legendOrientation, addYAxisLabelOffset, false);
   const echartOptions: EChartsOption = {
     useUTC: true,
     grid: {
@@ -161,17 +115,16 @@ export default function transformProps(chartProps: ChartProps): EchartsProps {
       min,
       max,
       minorTick: { show: true },
-      minorSplitLine: { show: minorSplitLine },
       axisLabel: { formatter },
       scale: truncateYAxis,
       name: yAxisTitle,
     },
     tooltip: {
       ...defaultTooltip,
-      trigger: richTooltip ? 'axis' : 'item',
+      trigger: 'item',
       formatter: (params: any) => {
-        const value: number = !richTooltip ? params.value : params[0].value[0];
-        const prophetValue = !richTooltip ? [params] : params;
+        const value: number = params.value;
+        const prophetValue = [params];
 
         const rows: Array<string> = [`${tooltipFormatter(value)}`];
         const prophetValues: Record<string, ProphetValue> = extractProphetValuesFromTooltipParams(
@@ -192,7 +145,7 @@ export default function transformProps(chartProps: ChartProps): EchartsProps {
       },
     },
     legend: {
-      ...getLegendProps(legendType, legendOrientation, showLegend, zoomable),
+      ...getLegendProps(legendType, legendOrientation, showLegend, false),
       // @ts-ignore
       data: rawSeries
         .filter(
@@ -200,34 +153,9 @@ export default function transformProps(chartProps: ChartProps): EchartsProps {
             extractForecastSeriesContext((entry.name || '') as string).type ===
             ForecastSeriesEnum.Observation,
         )
-        .map(entry => entry.name || '')
-        .concat(extractAnnotationLabels(annotationLayers, annotationData)),
+        .map(entry => entry.name || ''),
     },
-    series: dedupSeries(series),
-    toolbox: {
-      show: zoomable,
-      top: TIMESERIES_CONSTANTS.toolboxTop,
-      right: TIMESERIES_CONSTANTS.toolboxRight,
-      feature: {
-        dataZoom: {
-          yAxisIndex: false,
-          title: {
-            zoom: 'zoom area',
-            back: 'restore zoom',
-          },
-        },
-      },
-    },
-    dataZoom: zoomable
-      ? [
-          {
-            type: 'slider',
-            start: TIMESERIES_CONSTANTS.dataZoomStart,
-            end: TIMESERIES_CONSTANTS.dataZoomEnd,
-            bottom: TIMESERIES_CONSTANTS.zoomBottom,
-          },
-        ]
-      : [],
+    series: dedupSeries(series)
   };
 
   return {

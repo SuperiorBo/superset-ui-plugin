@@ -23,7 +23,7 @@
     "@storybook/addon-knobs": "^6.1.15",
     "@superset-ui/chart-controls": "^0.17.58",
     "@superset-ui/core": "^0.17.64",
-    "@superset-ui/plugin-chart-echarts": "^0.17.58",
+    "@superset-ui/plugin-chart-echarts": "file:../plugin-chart-echarts/src",
     "@types/react-loadable": "^5.5.3",
     "@types/react-resizable": "^1.7.2",
     "antd": "^4.9.4",

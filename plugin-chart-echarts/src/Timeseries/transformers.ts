@@ -70,6 +70,7 @@ export function transformSeries(
     opacity?: number;
     seriesType?: EchartsTimeseriesSeriesType;
     stack?: boolean;
+    richTooltip?: boolean;
     yAxisIndex?: number;
   },
 ): SeriesOption | undefined {
@@ -82,6 +83,7 @@ export function transformSeries(
     opacity,
     seriesType,
     stack,
+    richTooltip,
     yAxisIndex = 0,
   } = opts;
   const forecastSeries = extractForecastSeriesContext(name || '');
@@ -134,7 +136,10 @@ export function transformSeries(
     },
     showSymbol:
       !isConfidenceBand &&
-      (plotType === 'scatter' || (forecastEnabled && isObservation) || markerEnabled),
+      (plotType === 'scatter' ||
+        (forecastEnabled && isObservation) ||
+        markerEnabled ||
+        !richTooltip), // TODO: forcing markers when richTooltip is enabled will be removed once ECharts supports item based tooltips without markers
     symbolSize: markerSize,
   };
 }
