@@ -170,7 +170,7 @@ const config: ControlPanelConfig = {
               label: t('Put labels outside'),
               default: labelsOutside,
               renderTrigger: true,
-              description: t('Put the labels outside of the pie?'),
+              description: t('Put the labels outside of the Bar?'),
               visibility: ({ controls }: ControlPanelsContainerProps) =>
                 Boolean(controls?.show_labels?.value),
             },
@@ -184,14 +184,14 @@ const config: ControlPanelConfig = {
               label: t('Label Line'),
               default: labelLine,
               renderTrigger: true,
-              description: t('Draw line from Pie to label when labels outside?'),
+              description: t('Draw line from Bar to label when labels outside?'),
               visibility: ({ controls }: ControlPanelsContainerProps) =>
                 Boolean(controls?.show_labels?.value),
             },
           },
         ],
         // eslint-disable-next-line react/jsx-key
-        [<h1 className="section-header">{t('Pie shape')}</h1>],
+        [<h1 className="section-header">{t('Bar shape')}</h1>],
         [
           {
             name: 'outerRadius',
@@ -203,7 +203,7 @@ const config: ControlPanelConfig = {
               max: 100,
               step: 1,
               default: outerRadius,
-              description: t('Outer edge of Pie chart'),
+              description: t('Outer edge of Bar chart'),
             },
           },
         ],
@@ -215,7 +215,7 @@ const config: ControlPanelConfig = {
               label: t('Donut'),
               default: donut,
               renderTrigger: true,
-              description: t('Do you want a donut or a pie?'),
+              description: t('Do you want a donut or a Bar?'),
             },
           },
         ],

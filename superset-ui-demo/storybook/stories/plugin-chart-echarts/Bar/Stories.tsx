@@ -1,8 +1,8 @@
 import React from 'react';
 import { SuperChart, getChartTransformPropsRegistry } from '@superset-ui/core';
 import { boolean, number, select, withKnobs } from '@storybook/addon-knobs';
-import { EchartsBarChartPlugin } from '../../../../plugins';
-import transformProps from '../../../../plugins/Bar/transformProps';
+import { EchartsBarChartPlugin } from '@superset-ui/plugin-chart-echarts';
+import transformProps from '@superset-ui/plugin-chart-echarts/Bar/transformProps';
 import { weekday } from './data';
 import { withResizableChartDemo } from '../../../shared/components/ResizableChartDemo';
 

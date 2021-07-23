@@ -21,11 +21,11 @@ import buildQuery from './buildQuery';
 import controlPanel from './controlPanel';
 import transformProps from './transformProps';
 import thumbnail from './images/thumbnail.png';
-import { EchartsPieChartProps, EchartsPieFormData } from './types';
+import { EchartsBarChartProps, EchartsBarFormData } from './types';
 
-export default class EchartsPieChartPlugin extends ChartPlugin<
-  EchartsPieFormData,
-  EchartsPieChartProps
+export default class EchartsBarChartPlugin extends ChartPlugin<
+  EchartsBarFormData,
+  EchartsBarChartProps
 > {
   /**
    * The constructor is used to pass relevant metadata and callbacks that get
@@ -41,12 +41,12 @@ export default class EchartsPieChartPlugin extends ChartPlugin<
     super({
       buildQuery,
       controlPanel,
-      loadChart: () => import('./EchartsPie'),
+      loadChart: () => import('./EchartsBar'),
       metadata: new ChartMetadata({
         behaviors: [Behavior.INTERACTIVE_CHART],
         credits: ['https://echarts.apache.org'],
-        description: 'Pie Chart (Apache ECharts)',
-        name: t('Pie Chart'),
+        description: 'Bar Chart (Apache ECharts)',
+        name: t('Bar Chart'),
         thumbnail,
       }),
       transformProps,

@@ -11,18 +11,13 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "devDependencies": {
-    "@babel/core": "^7.14.6",
-    "@storybook/addon-actions": "^6.3.4",
-    "@storybook/addon-essentials": "^6.3.4",
-    "@storybook/addon-links": "^6.3.4",
-    "@storybook/react": "^6.3.4",
-    "babel-loader": "^8.2.2"
-  },
   "dependencies": {
-    "@storybook/addon-knobs": "^6.1.15",
+    "@storybook/addon-knobs": "^6.3.0",
+    "@storybook/addon-actions": "^6.3.5",
+    "@storybook/addon-links": "^6.3.5",
+    "@storybook/react": "^6.3.5",
     "@superset-ui/chart-controls": "^0.17.58",
-    "@superset-ui/core": "^0.17.64",
+    "@superset-ui/core": "^0.17.58",
     "@superset-ui/plugin-chart-echarts": "file:../plugin-chart-echarts/src",
     "@types/react-loadable": "^5.5.3",
     "@types/react-resizable": "^1.7.2",
@@ -31,6 +26,15 @@
     "react-dom": "^17.0.2",
     "react-icons": "^4.1.0",
     "react-loadable": "^5.5.0",
-    "react-resizable": "^1.10.1"
+    "react-resizable": "^1.10.1",
+    "echarts": "^5.1.2",
+    "mathjs": "^8.0.1",
+    "storybook-addon-jsx": "^7.2.3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "babel-loader": "^8.1.0",
+    "ts-loader": "^7.0.4",
+    "typescript": "^3.8.3"
   }
 }

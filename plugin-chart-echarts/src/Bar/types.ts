@@ -31,7 +31,7 @@ import {
   LegendType,
 } from '../types';
 
-export type EchartsPieFormData = QueryFormData &
+export type EchartsBarFormData = QueryFormData &
   EchartsLegendFormData & {
     colorScheme?: string;
     currentOwnValue?: string[] | null;
@@ -40,7 +40,7 @@ export type EchartsPieFormData = QueryFormData &
     groupby: string[];
     innerRadius: number;
     labelLine: boolean;
-    labelType: EchartsPieLabelType;
+    labelType: EchartsBarLabelType;
     labelsOutside: boolean;
     metric?: string;
     outerRadius: number;
@@ -51,7 +51,7 @@ export type EchartsPieFormData = QueryFormData &
     emitFilter: boolean;
   };
 
-export enum EchartsPieLabelType {
+export enum EchartsBarLabelType {
   Key = 'key',
   Value = 'value',
   Percent = 'percent',
@@ -60,19 +60,19 @@ export enum EchartsPieLabelType {
   KeyValuePercent = 'key_value_percent',
 }
 
-export interface EchartsPieChartProps extends ChartProps {
-  formData: EchartsPieFormData;
+export interface EchartsBarChartProps extends ChartProps {
+  formData: EchartsBarFormData;
   queriesData: ChartDataResponseResult[];
 }
 
 // @ts-ignore
-export const DEFAULT_FORM_DATA: EchartsPieFormData = {
+export const DEFAULT_FORM_DATA: EchartsBarFormData = {
   ...DEFAULT_LEGEND_FORM_DATA,
   donut: false,
   groupby: [],
   innerRadius: 30,
   labelLine: false,
-  labelType: EchartsPieLabelType.Key,
+  labelType: EchartsBarLabelType.Key,
   legendOrientation: LegendOrientation.Top,
   legendType: LegendType.Scroll,
   numberFormat: 'SMART_NUMBER',
@@ -84,8 +84,8 @@ export const DEFAULT_FORM_DATA: EchartsPieFormData = {
   dateFormat: 'smart_date',
 };
 
-export interface PieChartTransformedProps {
-  formData: EchartsPieFormData;
+export interface BarChartTransformedProps {
+  formData: EchartsBarFormData;
   height: number;
   width: number;
   echartOptions: EChartsOption;
