@@ -105,7 +105,7 @@ export default function transformProps(chartProps: EchartsBarChartProps): BarCha
   const metricLabel = getMetricLabel(metric);
   
   const labelMap = data.reduce((acc: Record<string, DataRecordValue[]>, datum) => {
-    console.log(acc,datum);
+    
     const label = extractGroupbyLabel({
       datum,
       groupby,
@@ -117,6 +117,7 @@ export default function transformProps(chartProps: EchartsBarChartProps): BarCha
       [label]: groupby.map(col => datum[col]),
     };
   }, {});
+
   const { setDataMask = () => { } } = hooks;
 
   const series: BarSeriesOption[] = [];
@@ -151,7 +152,7 @@ export default function transformProps(chartProps: EchartsBarChartProps): BarCha
       return regexMatch[1];
     }).filter(x => !!x);
     let total=metricTypeTotal[type];
-    metricTypeTotal[type]=metricTypeTotal[type]+calculateTotal(d,helpKeys);
+    metricTypeTotal[type]+=calculateTotal(d,helpKeys);
     return total;
   }
   const calculateTotal=(d,keys)=>{
@@ -161,6 +162,7 @@ export default function transformProps(chartProps: EchartsBarChartProps): BarCha
     });
     return total
   }
+
   metricTypes.forEach(x => {
     series.push({
       name: '辅助',
@@ -228,7 +230,6 @@ export default function transformProps(chartProps: EchartsBarChartProps): BarCha
     },
     series: series
   };
-  console.log("echartOptions", echartOptions);
   return {
     formData,
     width,

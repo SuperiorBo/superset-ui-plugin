@@ -24,7 +24,7 @@ export const BarTimeWaterfall = ({ width, height }) => {
       queriesData={[{ data: data }]}
       formData={{
         colorScheme: 'supersetColors',
-        groupby: ['__timestamp','Boston'],
+        groupby: ['__timestamp'],
         metric: 'SUM(AIR_TIME)',
         numberFormat: 'SMART_NUMBER',
         donut: boolean('Donut', false),
