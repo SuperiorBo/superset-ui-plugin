@@ -117,9 +117,8 @@ export default function transformProps(chartProps: EchartsBarChartProps): BarCha
       [label]: groupby.map(col => datum[col]),
     };
   }, {});
-
   const { setDataMask = () => { } } = hooks;
-
+  const timeKey=groupby[0];
   const series: BarSeriesOption[] = [];
   const dataKeys = data.length > 0 ? Object.keys(data[0]) : [];
   const seriesTypeRegex = new RegExp(
@@ -177,8 +176,11 @@ export default function transformProps(chartProps: EchartsBarChartProps): BarCha
           color: 'rgba(0,0,0,0)'
         }
       },
+      tooltip:{
+        show: false 
+      },
       data: data.map(d => {
-        return [Number(d.__timestamp), getHelpData(d,x)]
+        return [Number(d[timeKey]), getHelpData(d,x)]
       })
     });
   });
@@ -194,7 +196,7 @@ export default function transformProps(chartProps: EchartsBarChartProps): BarCha
         position: 'inside'
       },
       data: data.map(d => {
-        return [Number(d.__timestamp), Number(d[name])]
+        return [Number(d[timeKey]), Number(d[name])]
       })
     });
   })
