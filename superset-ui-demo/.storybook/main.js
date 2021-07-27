@@ -4,11 +4,10 @@ module.exports = {
     "../storybook/stories/**/[S|s]tories.@(js|jsx|ts|tsx)"
   ],
   "addons": [
-    '@storybook/preset-typescript',
-    '@storybook/addon-knobs/register',
-    'storybook-addon-jsx/register',
-    '@storybook/addon-actions/register',
-    '@storybook/addon-links/register',
+    '@storybook/addon-knobs',
+    'storybook-addon-jsx',
+    '@storybook/addon-actions',
+    '@storybook/addon-links'
   ],
   webpackFinal: config => {
     config.module.rules.push({
