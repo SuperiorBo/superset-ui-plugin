@@ -18,6 +18,7 @@
  */
 // export { default as EchartsBoxPlotChartPlugin } from './BoxPlot';
 export { default as EchartsTimeseriesChartPlugin } from './Timeseries';
+export { default as EchartsWaterfallChartPlugin } from './BarTimeWaterfall';
 export { default as EchartsBarChartPlugin } from './Bar';
 // export { default as EchartsMixedTimeseriesChartPlugin } from './MixedTimeseries';
 // export { default as EchartsPieChartPlugin } from './Pie';

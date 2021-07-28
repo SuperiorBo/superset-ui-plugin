@@ -1,12 +1,12 @@
 import React from 'react';
 import { SuperChart, getChartTransformPropsRegistry } from '@superset-ui/core';
 import { boolean, number, select, withKnobs } from '@storybook/addon-knobs';
-import { EchartsBarChartPlugin } from '../../../../plugins';
-import transformProps from '../../../../plugins/BarTimeWaterfall/transformProps';
+import { EchartsWaterfallChartPlugin } from '@superset-ui/plugin-chart-echarts';
+import transformProps from '@superset-ui/plugin-chart-echarts/BarTimeWaterfall/transformProps';
 import data from './data';
 import { withResizableChartDemo } from '../../../shared/components/ResizableChartDemo';
 
-new EchartsBarChartPlugin().configure({ key: 'echarts-bar-time-waterfall' }).register();
+new EchartsWaterfallChartPlugin().configure({ key: 'echarts-bar-time-waterfall' }).register();
 
 getChartTransformPropsRegistry().registerValue('echarts-bar-time-waterfall', transformProps);
 
