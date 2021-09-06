@@ -1,3 +1,5 @@
+const path = require('path')
+
 module.exports = {
   "stories": [
     "../storybook/stories/**/[S|s]tories.mdx",
@@ -5,22 +7,21 @@ module.exports = {
   ],
   "addons": [
     '@storybook/addon-knobs',
-    'storybook-addon-jsx',
-    '@storybook/addon-actions',
-    '@storybook/addon-links'
+    '@storybook/addon-essentials'
   ],
-  webpackFinal: config => {
-    config.module.rules.push({
-      test: /\.tsx?$/,
-      use: [
-        {
-          loader: require.resolve('ts-loader'),
-          options: {
-            transpileOnly: true,
-          },
-        },
-      ],
-    });
-    return config;
-  }
+  // webpackFinal: config => {
+  //   config.module.rules.push({
+  //     test: /\.tsx?$/,
+  //     use: [
+  //       {
+  //         loader: require.resolve('ts-loader'),
+  //         options: {
+  //           transpileOnly: true,
+  //         },
+  //       }
+  //     ],
+  //     include: path.resolve(__dirname,'../node_modules')
+  //   });
+  //   return config;
+  // }
 }

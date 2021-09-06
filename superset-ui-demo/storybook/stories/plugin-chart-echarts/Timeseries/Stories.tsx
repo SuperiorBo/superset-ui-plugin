@@ -1,8 +1,8 @@
 import React from 'react';
 import { SuperChart, getChartTransformPropsRegistry } from '@superset-ui/core';
 import { boolean, number, select, withKnobs } from '@storybook/addon-knobs';
-import { EchartsTimeseriesChartPlugin } from '@superset-ui/plugin-chart-echarts';
-import transformProps from '@superset-ui/plugin-chart-echarts/Timeseries/transformProps';
+import { EchartsTimeseriesChartPlugin } from '../../../../plugins/src';
+import transformProps from '../../../../plugins/src/Timeseries/transformProps';
 import data from './data';
 import { withResizableChartDemo } from '../../../shared/components/ResizableChartDemo';
 
@@ -15,7 +15,7 @@ export default {
   decorators: [withKnobs, withResizableChartDemo],
 };
 
-export const Timeseries = ({ width, height }) => {
+export const TimeSeries = ({ width, height }) => {
   const forecastEnabled = boolean('Enable forecast', true);
   const queryData = data
     .map(row =>

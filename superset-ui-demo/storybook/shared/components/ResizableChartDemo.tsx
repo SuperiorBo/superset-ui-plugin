@@ -16,7 +16,7 @@ export const SupersetBody = styled.div`
 export default function ResizableChartDemo({
   children,
   panelPadding = 30,
-  initialSize = { width: 500, height: 300 },
+  initialSize = { width: 1000, height: 400 },
 }: {
   children: (innerSize: Size) => ReactNode;
   panelPadding?: number;

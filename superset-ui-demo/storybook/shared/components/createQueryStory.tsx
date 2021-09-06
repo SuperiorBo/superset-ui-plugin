@@ -21,7 +21,7 @@ export default function createQueryStory({
     const host = text('Set Superset App host for CORS request', 'localhost:8088');
     const mode = select('Choose mode:', keys, keys[0]);
     const { formData: presetFormData, chartType } = choices[mode];
-    const width = text('Vis width', '400');
+    const width = text('Vis width', '800');
     const height = text('Vis height', '400');
     const formData = text('Override formData', JSON.stringify(presetFormData, null, 2));
 
