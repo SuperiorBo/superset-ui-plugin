@@ -1,8 +1,8 @@
 import React from 'react';
 import { SuperChart, getChartTransformPropsRegistry } from '@superset-ui/core';
 import { boolean, number, select, withKnobs } from '@storybook/addon-knobs';
-import { EchartsWaterfallPlusChartPlugin } from '../../../../plugins/src';
-import transformProps from '../../../../plugins/src/WaterfallPlus/transformProps';
+import { EchartsWaterfallPlusChartPlugin } from '@superset-ui/plugin-chart-echarts';
+import transformProps from '@superset-ui/plugin-chart-echarts/WaterfallPlus/transformProps';
 import data from './data';
 import { withResizableChartDemo } from '../../../shared/components/ResizableChartDemo';
 

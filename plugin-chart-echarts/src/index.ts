@@ -17,9 +17,10 @@
  * under the License.
  */
 // export { default as EchartsBoxPlotChartPlugin } from './BoxPlot';
-export { default as EchartsTimeseriesChartPlugin } from './Timeseries';
-export { default as EchartsWaterfallChartPlugin1 } from './BarTimeWaterfall';
-export { default as EchartsBarChartPlugin1 } from './Bar';
+// export { default as EchartsTimeseriesChartPlugin } from './Timeseries';
+// export { default as EchartsWaterfallChartPlugin1 } from './BarTimeWaterfall';
+// export { default as EchartsBarChartPlugin1 } from './Bar';
+export { default as EchartsWaterfallPlusChartPlugin } from './WaterfallPlus';
 // export { default as EchartsMixedTimeseriesChartPlugin } from './MixedTimeseries';
 // export { default as EchartsPieChartPlugin } from './Pie';
 // export { default as EchartsGraphChartPlugin } from './Graph';

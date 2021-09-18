@@ -1,9 +1,11 @@
 {
   "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
     "declaration": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": false,
+    "jsx": "react",
     "lib": [
       "dom",
       "esnext"
@@ -21,28 +23,22 @@
     "composite": true,
     "declarationMap": true,
     "skipLibCheck": true,
+    "emitDeclarationOnly": true,
     "resolveJsonModule": true,
     "typeRoots": [
       "./node_modules/@types"
     ],
-    "jsx": "react",
-    "outDir": "../build/lib",
-    "rootDir": "../",
-    "emitDeclarationOnly": false,
-    "sourceMap": true,
-    "allowSyntheticDefaultImports": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "noImplicitAny": false,
-    "noEmit": false,
+    "declarationDir": "lib",
+    "outDir": "lib",
+    "rootDir": "src"
   },
-  "exclude": ["node_modules"],
-  "include": [
-    "storybook",
-    "../**/src",
-    "plugins/**/src",
+  "exclude": [
+    "lib",
+    "test"
   ],
-  // "references": [
-  //   { "path": "../plugin-chart-echarts" }
-  // ]
+  "include": [
+    "src/**/*",
+    "types/**/*",
+    "../../types/**/*"
+  ]
 }
