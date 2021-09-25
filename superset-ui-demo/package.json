@@ -18,7 +18,6 @@
     "@emotion/styled": "^11.3.0",
     "@superset-ui/chart-controls": "^0.18.2",
     "@superset-ui/core": "^0.18.2",
-    "@superset-ui/plugin-chart-echarts": "file:../plugin-chart-echarts/src",
     "@types/react-loadable": "^5.5.3",
     "@types/react-resizable": "^1.7.2",
     "antd": "^4.9.4",

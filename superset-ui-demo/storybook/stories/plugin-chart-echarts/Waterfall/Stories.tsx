@@ -1,25 +1,25 @@
 import React from 'react';
 import { SuperChart, getChartTransformPropsRegistry } from '@superset-ui/core';
-import { boolean, number, select, withKnobs } from '@storybook/addon-knobs';
-import { EchartsWaterfallPlusChartPlugin } from '@superset-ui/plugin-chart-echarts';
-import transformProps from '@superset-ui/plugin-chart-echarts/WaterfallPlus/transformProps';
+import { boolean, withKnobs } from '@storybook/addon-knobs';
+import { EchartsWaterfallChartPlugin } from '@superset-ui/plugin-chart-echarts';
+import transformProps from '@superset-ui/plugin-chart-echarts/src/Waterfall/transformProps';
 import data from './data';
 import { withResizableChartDemo } from '../../../shared/components/ResizableChartDemo';
 
 
-new EchartsWaterfallPlusChartPlugin().configure({ key: 'echarts-waterfallplus' }).register();
+new EchartsWaterfallChartPlugin().configure({ key: 'echarts-waterfall' }).register();
 
-getChartTransformPropsRegistry().registerValue('echarts-waterfallplus', transformProps);
+getChartTransformPropsRegistry().registerValue('echarts-waterfall', transformProps);
 
 export default {
-    title: 'Chart Plugins|plugin-chart-echarts/Waterfallplus',
+    title: 'Chart Plugins|plugin-chart-echarts/Waterfall',
     decorators: [withKnobs, withResizableChartDemo],
   };
   
 export const WaterfallPlus = ({ width, height }) => {
     return (
         <SuperChart
-        chartType="echarts-waterfallplus"
+        chartType="echarts-waterfall"
         width={width}
         height={height}
         queriesData={[{ data }]}

@@ -17,21 +17,18 @@
  * under the License.
  */
 import {
-  AnnotationData,
-  AnnotationLayer,
-  AnnotationOpacity,
   CategoricalColorScale,
-  EventAnnotationLayer,
   getTimeFormatter,
   IntervalAnnotationLayer,
   isTimeseriesAnnotationResult,
   smartDateDetailedFormatter,
   smartDateFormatter,
   TimeFormatter,
+  NumberFormatter,
   TimeseriesAnnotationLayer,
   TimeseriesDataRecord,
 } from '@superset-ui/core';
-import { SeriesOption } from 'echarts';
+import { SeriesOption,BarSeriesOption,LineSeriesOption } from 'echarts';
 import {
   CallbackDataParams,
   DefaultExtraStateOpts,
@@ -48,34 +45,226 @@ import { MarkLine1DDataItemOption } from 'echarts/types/src/component/marker/Mar
 
 import { extractForecastSeriesContext } from '../utils/prophet';
 import { ForecastSeriesEnum, LegendOrientation } from '../types';
-
+import { WaterfallSeriesEnum,WaterfallSeriesContext } from './types';
 import { getChartPadding } from '../utils/series';
 import { TIMESERIES_CONSTANTS } from '../constants';
+import { groupBy } from 'lodash';
+import { useState } from 'react';
+
+
+const seriesTypeRegex = new RegExp(
+  `(.+)(${WaterfallSeriesEnum.WaterfallCumulative})$`,
+);
+export const extractWaterfallSeriesContext = (seriesName: OptionName): WaterfallSeriesContext => {
+  const name = seriesName as string;
+  const regexMatch = seriesTypeRegex.exec(name);
+  if (!regexMatch) return { name, type: WaterfallSeriesEnum.Observation };
+  return {
+    name: regexMatch[1],
+    type: regexMatch[2] as WaterfallSeriesEnum,
+  };
+};
+
+
+function isNumber(value: any | undefined | null) : number{
+  if(value === undefined || value === null || typeof value !== 'number') 
+    return 0;
+  return value;
+}
+
+function extractStack(context : WaterfallSeriesContext|undefined, isStack? : boolean):string{
+  if(context.name === WaterfallSeriesEnum.WaterfallWorth)
+    return context.name;
+  if(isStack) return 'stack'
+  return context.name;
+}
+
+function extractType(key : any):string{
+  if(key === null || key === undefined) return "";
+  return key.split(',')[1];
+}
+
+function extractName(key : any | undefined | null):string{
+  if(key === null || key === undefined)
+    return key;
+  return key.split(',')[0];
+}
+
+export function dimensionTimeseriesSeries(
+  data: TimeseriesDataRecord[],
+  opts:{
+    isStack? : boolean;
+    isTotal? : boolean;
+    labelEnabled? : boolean;
+    highPointer? : boolean;}
+  ): TimeseriesDataRecord[]
+{
+  const keys = Object.keys(data[0]).filter(key => key !== '__timestamp');
+  const {isTotal} = opts;
+  
+  let previousTotalValue = new Array(keys.length).fill({});
+
+  if(isTotal) keys.push(WaterfallSeriesEnum.WaterfallWorth);
+  return data.map((datum,rowIdx) => {
+
+    if(isTotal)
+    {
+      let total = keys.reduce((result,currKey)=>{
+        result += isNumber(datum[currKey])
+        return result
+      },0)
+
+      datum[WaterfallSeriesEnum.WaterfallWorth] = total;
+    }
+
+
+    let cumulatve = keys.reduce((result,currKey)=>{
+      let key = `${currKey}${WaterfallSeriesEnum.WaterfallCumulative}`;
+
+      if(rowIdx === 0)
+        result[key] = 0;
+      else
+      {
+        let preValue = isNumber(data[rowIdx-1][currKey]);
+        let curValue = isNumber(datum[currKey]);
+        let preTotalValue = isNumber(previousTotalValue[key]); 
+        result[key] = preTotalValue;
+        if((curValue <= 0 && preValue <= 0) || (curValue > 0 && preValue > 0))
+          result[key] = preTotalValue + preValue;
+        if(preValue > 0 && curValue < 0)
+        {
+          result[key] = preTotalValue + preValue + curValue;
+        }
+      }
+      previousTotalValue[key] = result[key];
+      
+      return result
+    },{});
+
+    datum = {...cumulatve,...datum};
+    
+    return {
+      __timestamp: datum.__timestamp || datum.__timestamp === 0 ? new Date(datum.__timestamp) : null
+      ,...datum};
+  });
+}
+
+function addHighPoint(series: BarSeriesOption)
+{
+
+    let sum = 0
+    series.data.forEach(element => {
+      sum+= element[1];
+    });
+    series.markLine = {
+      // show:true,
+      data: [
+        { yAxis: sum }
+      ]
+    }
+}
+
+function addSeriesLabel(series: BarSeriesOption)
+{
+  series.data = series.data.map((value: any)=>({
+    value,
+    label: {
+      show: true,
+      formatter:(params:CallbackDataParams):string=>{
+        const {value} = params;
+        var sum = value[2] * value[1];
+        if( sum !== 0) 
+          return sum + '';
+        else
+          return "";
+      },
+      position:  value[2] * value[1] > 0 ? 'top':'bottom',
+    },
+  }));
+}
+
+function cumulativeColor(
+  series: BarSeriesOption|undefined)
+{
+  series.itemStyle = {
+    color: 'rgba(0,0,0,0)',
+  };
+  series.emphasis = {
+    color: 'rgba(0,0,0,0)',
+    barBorderColor: 'rgba(0,0,0,0)',
+  };
+}
+
+function rebaseSeriesData(
+  series: BarSeriesOption,
+  context:WaterfallSeriesContext
+  )
+{
+  series.data = series.data.map(datum =>{
+    var value = 1;
+    if(context.name === WaterfallSeriesEnum.WaterfallWorth)
+      value = datum[1] > 0 ? 1 : -1
+    return [datum[0],datum[1]*value,value]
+  }); 
+}
+
+
 
 export function transformSeries(
-  series: SeriesOption,
+  series: BarSeriesOption,
   colorScale: CategoricalColorScale,
   opts: {
-    markerEnabled?: boolean;
-    markerSize?: number;
-    stack?: boolean;
+    isStack?: boolean;
+    isTotal?: boolean;
+    labelEnabled? : boolean;
+    highPointer? : boolean;
   }
 ): SeriesOption | undefined {
-  const { name } = series;
+  const { id } = series;
   const {
-    markerEnabled,
-    markerSize,
-    stack
+    isStack,
+    isTotal,
+    labelEnabled,
+    highPointer
   } = opts;
+
+  const {name} = series;
+
+  const waterfallSeries = extractWaterfallSeriesContext(name || '');
+
+  // const stack = extractStack(id,isStack);
+
+  // const name = extractName(id);
+
+  // const type = extractType(id);
+  // console.log(waterfallSeries);
+
+  if(waterfallSeries.type === WaterfallSeriesEnum.WaterfallCumulative)
+  {
+    cumulativeColor(series);
+  }
+  else
+  {
+
+    if(highPointer)
+      addHighPoint(series);
+    
+    rebaseSeriesData(series,waterfallSeries);
+
+    if(labelEnabled)
+      addSeriesLabel(series);
+    
+  }
+  
+
+
   return {
     ...series,
-    name,
-    itemStyle: {
-      color: colorScale(name),
-    },
-    type: 'bar',
-    showSymbol: markerEnabled,
-    symbolSize: markerSize,
+    type:'bar',
+    stack:extractStack(waterfallSeries,isStack),
+    name:waterfallSeries.name,
+    barCategoryGap:'0%',
+    barGap:'0%',
   }
 }
 
@@ -123,4 +312,8 @@ export function getXAxisFormatter(format?: string): TimeFormatter | StringConstr
     return getTimeFormatter(format);
   }
   return String;
+}
+
+export function extractWaterfallValuesFromTooltipParams(){
+
 }

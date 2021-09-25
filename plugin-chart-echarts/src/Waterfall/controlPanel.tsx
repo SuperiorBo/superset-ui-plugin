@@ -33,9 +33,10 @@ import { legendSection } from '../controls';
 
 const {
   logAxis,
-  markerEnabled,
-  markerSize,
   stack,
+  total,
+  highPointer,
+  labelEnabled,
   tooltipTimeFormat,
   truncateYAxis,
   yAxisBounds,
@@ -51,8 +52,6 @@ const config: ControlPanelConfig = {
       expanded: true,
       controlSetRows: [
         ['metrics'],
-        ['groupby'],
-        ['adhoc_filters'],
         ['limit'],
         ['timeseries_limit_metric'],
         [
@@ -66,7 +65,6 @@ const config: ControlPanelConfig = {
             },
           },
         ],
-        ['row_limit'],
       ],
     },
     {
@@ -88,170 +86,34 @@ const config: ControlPanelConfig = {
         ],
         [
           {
-            name: 'markerEnabled',
+            name: 'total',
             config: {
               type: 'CheckboxControl',
-              label: t('Marker'),
+              label: t('Total series'),
               renderTrigger: true,
-              default: markerEnabled,
-              description: t('Draw a marker on data points. Only applicable for line types.'),
+              default: total,
             },
           },
         ],
         [
           {
-            name: 'markerSize',
-            config: {
-              type: 'SliderControl',
-              label: t('Marker Size'),
-              renderTrigger: true,
-              min: 0,
-              max: 100,
-              default: markerSize,
-              description: t('Size of marker. Also applies to forecast observations.'),
-              visibility: ({ controls }: ControlPanelsContainerProps) =>
-                Boolean(controls?.markerEnabled?.value),
-            },
-          },
-        ],
-        ...legendSection,
-        [<h1 className="section-header">{t('X Axis')}</h1>],
-        [
-          {
-            name: 'x_axis_time_format',
-            config: {
-              ...sharedControls.x_axis_time_format,
-              default: 'smart_date',
-              description: `${D3_TIME_FORMAT_DOCS}. ${t(
-                'When using other than adaptive formatting, labels may overlap.',
-              )}`,
-            },
-          },
-        ],
-        [
-          {
-            name: 'xAxisShowMinLabel',
+            name: 'highPointer',
             config: {
               type: 'CheckboxControl',
-              label: t('Show Min Label'),
-              default: xAxisShowMinLabel,
+              label: t('Total series'),
               renderTrigger: true,
-              description: t('Show Min Label'),
+              default: total,
             },
           },
         ],
         [
           {
-            name: 'xAxisShowMaxLabel',
+            name: 'highPointer',
             config: {
               type: 'CheckboxControl',
-              label: t('Show Max Label'),
-              default: xAxisShowMaxLabel,
+              label: t('Total series'),
               renderTrigger: true,
-              description: t('Show Max Label'),
-            },
-          },
-        ],
-        [
-          {
-            name: 'xAxisLabelRotation',
-            config: {
-              type: 'SelectControl',
-              freeForm: true,
-              clearable: false,
-              label: t('Rotate x axis label'),
-              choices: [
-                [0, '0°'],
-                [45, '45°'],
-              ],
-              default: xAxisLabelRotation,
-              renderTrigger: true,
-              description: t('Input field supports custom rotation. e.g. 30 for 30°'),
-            },
-          },
-        ],
-        // eslint-disable-next-line react/jsx-key
-        [<h1 className="section-header">{t('Tooltip')}</h1>],
-        [
-          {
-            name: 'rich_tooltip',
-            config: {
-              type: 'CheckboxControl',
-              label: t('Rich tooltip'),
-              renderTrigger: true,
-              default: true,
-              description: t('Shows a list of all series available at that point in time'),
-            },
-          },
-        ],
-        [
-          {
-            name: 'tooltipTimeFormat',
-            config: {
-              ...sharedControls.x_axis_time_format,
-              label: t('Tooltip time format'),
-              default: tooltipTimeFormat,
-              clearable: false,
-            },
-          },
-        ],
-        // eslint-disable-next-line react/jsx-key
-        [<h1 className="section-header">{t('Y Axis')}</h1>],
-        ['y_axis_format'],
-        [
-          {
-            name: 'logAxis',
-            config: {
-              type: 'CheckboxControl',
-              label: t('Logarithmic y-axis'),
-              renderTrigger: true,
-              default: logAxis,
-              description: t('Logarithmic y-axis'),
-            },
-          },
-        ],
-        [
-          {
-            name: 'yAxisTitle',
-            config: {
-              type: 'TextControl',
-              label: t('Primary y-axis title'),
-              renderTrigger: true,
-              default: '',
-              description: t('Title for y-axis'),
-            },
-          },
-        ],
-        [
-          {
-            name: 'truncateYAxis',
-            config: {
-              type: 'CheckboxControl',
-              label: t('Truncate Y Axis'),
-              default: truncateYAxis,
-              renderTrigger: true,
-              description: t(
-                'Truncate Y Axis. Can be overridden by specifying a min or max bound.',
-              ),
-            },
-          },
-        ],
-        [
-          {
-            name: 'y_axis_bounds',
-            config: {
-              type: 'BoundsControl',
-              label: t('Y Axis Bounds'),
-              renderTrigger: true,
-              default: yAxisBounds,
-              description: t(
-                'Bounds for the Y-axis. When left empty, the bounds are ' +
-                  'dynamically defined based on the min/max of the data. Note that ' +
-                  "this feature will only expand the axis range. It won't " +
-                  "narrow the data's extent.",
-              ),
-              visibility: ({ controls }: ControlPanelsContainerProps) =>
-                Boolean(controls?.truncateYAxis?.value),
+              default: total,
             },
           },
         ],

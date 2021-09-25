@@ -20,17 +20,17 @@
 import {
   CategoricalColorNamespace,
   ChartProps,
+  getMetricLabel,
   getNumberFormatter,
   TimeseriesChartDataResponseResult,
 } from '@superset-ui/core';
-import { EChartsOption, SeriesOption } from 'echarts';
+import { EChartsOption, SeriesOption,BarSeriesOption } from 'echarts';
 import { DEFAULT_FORM_DATA, EchartsWaterfallFormData } from './types';
 import { EchartsProps, ForecastSeriesEnum, ProphetValue } from '../types';
 import { parseYAxisBound } from '../utils/controls';
 import { dedupSeries, extractTimeseriesSeries, getLegendProps } from '../utils/series';
 import {
   extractForecastSeriesContext,
-  extractProphetValuesFromTooltipParams,
   formatProphetTooltipSeries,
   rebaseTimeseriesDatum,
 } from '../utils/prophet';
@@ -40,10 +40,24 @@ import {
   getTooltipTimeFormatter,
   getXAxisFormatter,
   transformSeries,
+  dimensionTimeseriesSeries, 
 } from './transformers';
 import { TIMESERIES_CONSTANTS } from '../constants';
 
+// function formatBarLabel({
+//   params,
+//   labelType,
+//   numberFormatter,
+// }: {
+//   params: CallbackDataParams;
+//   labelType: EchartsBarLabelType;
+//   numberFormatter: NumberFormatter;
+// }): string {
+
+// }
+
 export default function transformProps(chartProps: ChartProps): EchartsProps {
+  console.log('chartProps',chartProps);
   const { width, height, formData, queriesData } = chartProps;
   const {
     data = []
@@ -54,10 +68,11 @@ export default function transformProps(chartProps: ChartProps): EchartsProps {
     legendOrientation,
     legendType,
     logAxis,
-    markerEnabled,
-    markerSize,
+    labelEnabled,
+    highPointer,
     showLegend,
     stack,
+    total,
     truncateYAxis,
     yAxisFormat,
     xAxisShowMinLabel,
@@ -70,21 +85,50 @@ export default function transformProps(chartProps: ChartProps): EchartsProps {
   }: EchartsWaterfallFormData = { ...DEFAULT_FORM_DATA, ...formData };
 
   const colorScale = CategoricalColorNamespace.getScale(colorScheme as string);
-  const rebasedData = rebaseTimeseriesDatum(data);
-  const rawSeries = extractTimeseriesSeries(rebasedData, {
-    fillNeighborValue: stack ? 0 : undefined,
+  let rebasedData = rebaseTimeseriesDatum(data);
+
+  const recordData = dimensionTimeseriesSeries(rebasedData,{
+      isStack:stack,
+      isTotal:total,
+      labelEnabled,
+      highPointer,
+    });
+
+  // const defaultLabel = {
+  //   formatter,
+  //   show: showLabels,
+  //   color: '#000000',
+  // };
+
+
+  // console.log("recordData",recordData);
+  const rawSeries = extractTimeseriesSeries(recordData, {
+    fillNeighborValue: stack ? 0 : undefined
   });
+
+  // console.log(rawSeries.filter(series=>series.id !== 'cumulative'))
+  // const metricLabel = getMetricLabel('');
+  // console.log(metricLabel);
   const series: SeriesOption[] = [];
   const formatter = getNumberFormatter(yAxisFormat);
 
   rawSeries.forEach(entry => {
-    const transformedSeries = transformSeries(entry, colorScale, {
-      markerEnabled,
-      markerSize,
-      stack,
+    // const barSeries : BarSeriesOption = entry.data;
+    const transformedSeries = transformSeries(entry as BarSeriesOption, colorScale, {
+      isStack:stack,
+      isTotal:total,
+      labelEnabled,
+      highPointer,
     });
+    // console.log('transformedSeries',transformedSeries);
+
+    // console.log(transformedSeries);
     if (transformedSeries) series.push(transformedSeries);
   });
+  
+  
+
+  // console.log('series',series);
 
   // yAxisBounds need to be parsed to replace incompatible values with undefined
   let [min, max] = (yAxisBounds || []).map(parseYAxisBound);
@@ -103,46 +147,36 @@ export default function transformProps(chartProps: ChartProps): EchartsProps {
     xAxis: {
       type: 'time',
       axisLabel: {
-        showMinLabel: xAxisShowMinLabel,
-        showMaxLabel: xAxisShowMaxLabel,
+        show: true,
         formatter: xAxisFormatter,
-        rotate: xAxisLabelRotation,
       },
     },
     yAxis: {
-      ...defaultYAxis,
-      type: logAxis ? 'log' : 'value',
-      min,
-      max,
-      minorTick: { show: true },
-      axisLabel: { formatter },
-      scale: truncateYAxis,
-      name: yAxisTitle,
+      type:"value"
     },
     tooltip: {
       ...defaultTooltip,
-      trigger: 'item',
-      formatter: (params: any) => {
-        const value: number = params.value;
-        const prophetValue = [params];
-
-        const rows: Array<string> = [`${tooltipFormatter(value)}`];
-        const prophetValues: Record<string, ProphetValue> = extractProphetValuesFromTooltipParams(
-          prophetValue,
-        );
-
-        Object.keys(prophetValues).forEach(key => {
-          const value = prophetValues[key];
-          rows.push(
-            formatProphetTooltipSeries({
-              ...value,
-              seriesName: key,
-              formatter,
-            }),
-          );
+      trigger: 'axis',
+      formatter: (params: any) =>
+      {
+        // console.log(params);
+        const value= params[0].value[0]; 
+        const row : Array<string> = [`${tooltipFormatter(value)}`];
+        params.forEach(param=>{
+          const {value,marker,seriesName,seriesIndex} = param;
+          if(seriesIndex > 2)
+          {
+            row.push(`${marker}${seriesName === 'worth' ? '合计':seriesName} : `+value[1] * value[2]); 
+          }
         });
-        return rows.join('<br />');
-      },
+        
+        return row.join('<br />');
+
+        // const waterfallValues : Record<string, ProphetValue> = extractWaterfallValuesFromTooltipParams(waterfallValue)
+
+        // console.log(value);
+        // return value+'<br />';
+      }
     },
     legend: {
       ...getLegendProps(legendType, legendOrientation, showLegend, false),
@@ -158,6 +192,7 @@ export default function transformProps(chartProps: ChartProps): EchartsProps {
     series: dedupSeries(series)
   };
 
+  console.log('echartOptions',echartOptions);
   return {
     echartOptions,
     width,

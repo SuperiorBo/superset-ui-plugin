@@ -22,7 +22,7 @@ import controlPanel from './controlPanel';
 import transformProps from './transformProps';
 import thumbnail from './images/thumbnail.png';
 
-export default class EchartsTimeseriesChartPlugin extends ChartPlugin {
+export default class EchartsWaterfallChartPlugin extends ChartPlugin {
   /**
    * The constructor is used to pass relevant metadata and callbacks that get
    * registered in respective registries that are used throughout the library
@@ -37,17 +37,11 @@ export default class EchartsTimeseriesChartPlugin extends ChartPlugin {
     super({
       buildQuery,
       controlPanel,
-      loadChart: () => import('./EchartsTimeseries'),
+      loadChart: () => import('./EchartsWaterfall'),
       metadata: new ChartMetadata({
         credits: ['https://echarts.apache.org'],
-        description: 'Time-series (Apache ECharts)',
-        supportedAnnotationTypes: [
-          AnnotationType.Event,
-          AnnotationType.Formula,
-          AnnotationType.Interval,
-          AnnotationType.Timeseries,
-        ],
-        name: t('Time-series Chart'),
+        description: 'WaterfallPlus (Apache ECharts)',
+        name: t('Waterfall Chart'),
         thumbnail,
       }),
       transformProps,

@@ -19,13 +19,25 @@
 import { AnnotationLayer, TimeGranularity } from '@superset-ui/core';
 import { DEFAULT_LEGEND_FORM_DATA, EchartsLegendFormData } from '../types';
 
+export enum WaterfallSeriesEnum{
+  Observation = '',
+  WaterfallWorth = 'worth',
+  WaterfallCumulative = '__cumulative'
+}
+
+export type WaterfallSeriesContext = {
+  name: string;
+  type: WaterfallSeriesEnum;
+};
+
 export type EchartsWaterfallFormData = {
   colorScheme?: string;
   logAxis: boolean;
-  markerEnabled: boolean;
-  markerSize: number;
+  labelEnabled: boolean;
+  highPointer: boolean;
   orderDesc: boolean;
   stack: boolean;
+  total: boolean;
   tooltipTimeFormat?: string;
   truncateYAxis: boolean;
   yAxisFormat?: string;
@@ -40,15 +52,17 @@ export type EchartsWaterfallFormData = {
 export const DEFAULT_FORM_DATA: EchartsWaterfallFormData = {
   ...DEFAULT_LEGEND_FORM_DATA,
   logAxis: false,
-  markerEnabled: false,
-  markerSize: 6,
+  labelEnabled: false,
+  highPointer: false,
   orderDesc: true,
   stack: false,
+  total: true,
   tooltipTimeFormat: 'smart_date',
   truncateYAxis: true,
   yAxisBounds: [null, null],
   xAxisShowMinLabel: false,
   xAxisShowMaxLabel: false,
+  xAxisTimeFormat: '{yyyy}-{MM}-{dd}',
   xAxisLabelRotation: 0,
   yAxisTitle: '',
 };
