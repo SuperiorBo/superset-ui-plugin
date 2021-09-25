@@ -1,0 +1,53 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": false,
+    "lib": [
+      "dom",
+      "esnext"
+    ],
+    "module": "esnext",
+    "moduleResolution": "node",
+    "noEmitOnError": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "pretty": true,
+    "removeComments": false,
+    "strict": true,
+    "target": "es2015",
+    "useDefineForClassFields": false,
+    "declarationMap": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "typeRoots": [
+      "./node_modules/@types"
+    ],
+    "jsx": "react",
+    "outDir": "../build/lib",
+    "rootDir": "../",
+    "emitDeclarationOnly": false,
+    "sourceMap": true,
+    "allowSyntheticDefaultImports": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "noImplicitAny": false,
+    "noEmit": false,
+    "baseUrl": ".",
+    "paths": {
+      "@superset-ui/plugin-chart-echarts":["../plugin-chart-echarts/src"],
+      "@superset-ui/plugin-chart-echarts/*":["../plugin-chart-echarts/src/*"]
+    }
+  },
+  "exclude": ["node_modules"],
+  "include": [
+    "storybook",
+    "../**/src"
+  ],
+  "references": [
+    { 
+      "path": "../plugin-chart-echarts" 
+    }
+  ]
+}

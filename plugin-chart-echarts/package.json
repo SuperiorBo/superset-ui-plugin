@@ -1,0 +1,32 @@
+{
+  "name": "@superset-ui/plugin-chart-echarts",
+  "version": "0.1.0",
+  "description": "Superset Chart - Echarts",
+  "main": "lib/index.js",
+  "module": "esm/index.js",
+  "files": [
+    "esm",
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com:SuperiorBo/superset-ui-plugin.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@superset-ui/chart-controls": "0.18.2",
+    "@superset-ui/core": "0.18.2",
+    "@types/mathjs": "^6.0.7",
+    "d3-array": "^1.2.0",
+    "echarts": "^5.2.0",
+    "lodash": "^4.17.15",
+    "mathjs": "^8.0.1"
+  },
+  "peerDependencies": {
+    "react": "^16.13.1"
+  }
+}

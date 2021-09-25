@@ -1,0 +1,17 @@
+{
+  "name": "superset-ui-plugin",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@SuperiorBo:SuperiorBo/superset-ui-plugin.git",
+  "author": "chobon8 <chobon@aliyun.com>",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "plugin-chart-echarts",
+    "superset-ui-demo"
+  ],
+  "dependencies": {
+    "antd": "^4.16.13",
+    "react-loadable": "^5.5.0"
+  }
+}
